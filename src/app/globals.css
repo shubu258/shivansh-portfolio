@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+/* Dark neon palette: hot pink, sunny amber, electric cyan, lime-mint and violet on deep midnight. */
+:root {
+  --bg: #07071a;
+  --bg-2: #0c0c24;
+  --surface: #12122e;
+  --surface-2: #1b1a42;
+  --line: rgb(240 240 255 / 0.08);
+  --line-strong: rgb(240 240 255 / 0.18);
+  --cream: #f7f6ff;
+  --muted: #b2b0d6;
+  --faint: #7a78a6;
+  --ember: #ff2e7e;
+  --ember-soft: #ff63a1;
+  --peach: #ffc233;
+  --mint: #3df5b0;
+  --cyan: #22d3ff;
+  --violet: #a374ff;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-cream: var(--cream);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-ember: var(--ember);
+  --color-ember-soft: var(--ember-soft);
+  --color-peach: var(--peach);
+  --color-mint: var(--mint);
+  --color-cyan: var(--cyan);
+  --color-violet: var(--violet);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--ember);
+  color: var(--cream);
+}
+
+:focus-visible {
+  outline: 2px solid var(--peach);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Thin scrollbars for the in-room scroll areas */
+.room-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+  overscroll-behavior: contain;
+}
+
+/* Film grain overlay */
+.grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+}
+
+.dot-grid {
+  background-image: radial-gradient(rgb(243 238 219 / 0.09) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+
+.text-gradient {
+  background: linear-gradient(100deg, var(--peach) 0%, var(--ember) 35%, var(--violet) 70%, var(--cyan) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 8s ease-in-out infinite alternate;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: 100% 0;
+  }
+}
+
+/* Animated gradient border */
+.ring-gradient {
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    conic-gradient(from var(--angle, 0deg), var(--ember), var(--peach), var(--mint), var(--violet), var(--ember)) border-box;
+  border: 2px solid transparent;
+  animation: spin-angle 6s linear infinite;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes spin-angle {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Card with a cursor-following glow; --mx/--my are set by <Spotlight>. */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(380px circle at var(--mx, -999px) var(--my, -999px), var(--glow, rgb(255 46 126 / 0.14)), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+  pointer-events: none;
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+.caret {
+  animation: blink 1s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-gradient,
+  .ring-gradient,
+  .marquee {
+    animation: none;
+  }
+}
